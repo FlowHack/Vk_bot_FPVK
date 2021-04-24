@@ -70,7 +70,7 @@ class Handler:
                 self.message_processing()
             else:
                 self.__send_message__(
-                    MESSAGES['report_false'].format(symbols=report[1])
+                    MESSAGES['report_false'].format(words=report[1])
                 )
         elif self.__similarity__('🆘помощь🆘', text):
             keyboard = create_keyboard.inline_help()
@@ -154,8 +154,9 @@ class Handler:
                     if text == '🚫Отмена🚫':
                         return None
 
-                    if len(text) < 70:
-                        return False, len(text)
+                    length = len(text.split(' '))
+                    if length < 70:
+                        return False, length
 
                     self.__send_message__(
                         f'Сообщение об ошибке от пользователя: {user_id}\n\n'
