@@ -1,0 +1,37 @@
+from time import sleep
+
+from requests.exceptions import ConnectionError
+from vk_api import VkApi
+from vk_api.longpoll import VkLongPoll
+
+from handler import Handler
+from settings import LOGGER, TOKEN, GROUP_ID
+
+LOGGER = LOGGER('main_bot', 'main')
+
+
+class Bot:
+    def __init__(self):
+        self.client, self.longpoll = self.__get_client__()
+        self.api = self.client.get_api()
+        LOGGER.info('Получен клиент, longpoll и api')
+        self.handler = Handler(self.api, self.client, self.longpoll)
+
+    def __get_client__(self):
+        try:
+            LOGGER.info('Получение клиента VK')
+            client = VkApi(token=TOKEN)
+
+            LOGGER.info('Получение longpoll')
+            vk_longpoll = VkLongPoll(client, group_id=GROUP_ID)
+
+            return client, vk_longpoll
+
+        except ConnectionError:
+            LOGGER.error('Нет подключения к интернету, перезапускаю')
+            sleep(5)
+            self.__get_client__()
+
+
+if __name__ == '__main__':
+    my_bot = Bot()
