@@ -48,7 +48,8 @@ class Handler:
 
         if self.__similarity__('start', text) or \
                 self.__similarity__('привет', text) or \
-                self.__similarity__('хай', text):
+                self.__similarity__('хай', text) or \
+                self.__similarity__('начать', text):
             keyboard = create_keyboard.start()
             self.__send_message__(MESSAGES['start'], keyboard=keyboard)
         elif self.__similarity__('проверить доступ к fpvk', text):
