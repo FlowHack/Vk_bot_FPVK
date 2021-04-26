@@ -2,7 +2,7 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
 from settings import GROUP_ID
 
-HASH = f'action=pay-to-group&amount=50&group_id={GROUP_ID}&aid=7743684'
+HASH = f'action=pay-to-group&amount=50&group_id={GROUP_ID}'
 POSITIVE = VkKeyboardColor.POSITIVE
 PRIMARY = VkKeyboardColor.PRIMARY
 NEGATIVE = VkKeyboardColor.NEGATIVE
