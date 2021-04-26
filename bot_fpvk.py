@@ -34,4 +34,11 @@ class Bot:
 
 
 if __name__ == '__main__':
-    my_bot = Bot()
+    while True:
+        try:
+            my_bot = Bot()
+        except BaseException as error:
+            LOGGER.error(
+                f'Неизестная ошибка! {error}'
+            )
+            pass

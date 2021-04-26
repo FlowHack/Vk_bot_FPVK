@@ -10,7 +10,9 @@ import os
 from requests.exceptions import ReadTimeout
 
 import keyboard as create_keyboard
-from settings import GROUP_ID, MESSAGES, PATH_ATTACHMENT
+from settings import GROUP_ID, MESSAGES, PATH_ATTACHMENT, LOGGER
+
+LOGGER = LOGGER('handler', 'main')
 
 
 class Handler:
@@ -33,11 +35,11 @@ class Handler:
                     pass
 
     def longpoll_listen(self):
+        LOGGER.warning('Запуск прослушивания longpoll')
         for event in self._longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                 self._text_message = event.text
                 self._user_id = event.user_id
-
                 self.message_processing()
 
     def message_processing(self):
