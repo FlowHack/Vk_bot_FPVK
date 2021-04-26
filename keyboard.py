@@ -94,7 +94,9 @@ def inline_download():
     keyboard = VkKeyboard(inline=True)
 
     keyboard.add_button('Windows', PRIMARY)
+    keyboard.add_line()
     keyboard.add_button('MacOs', PRIMARY)
+    keyboard.add_line()
     keyboard.add_button('Linux', PRIMARY)
 
     return keyboard.get_keyboard()
