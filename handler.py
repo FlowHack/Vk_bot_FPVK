@@ -227,7 +227,7 @@ class Handler:
     def __isDon__(self):
         time = time_now()
 
-        if self._time_donat < time - 300:
+        if self._time_donat+300 < time:
             params = {
                 'group_id': GROUP_ID,
                 'filter': 'donut'

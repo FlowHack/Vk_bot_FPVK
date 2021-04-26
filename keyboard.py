@@ -1,8 +1,5 @@
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 
-from settings import GROUP_ID
-
-HASH = f'action=pay-to-group&amount=50&group_id={GROUP_ID}'
 POSITIVE = VkKeyboardColor.POSITIVE
 PRIMARY = VkKeyboardColor.PRIMARY
 NEGATIVE = VkKeyboardColor.NEGATIVE
@@ -10,6 +7,7 @@ NEGATIVE = VkKeyboardColor.NEGATIVE
 WINDOWS = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/windows.zip'
 POSIX = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/posix.zip'
 MAC = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/mac.zip'
+URL_PAY = 'https://vk.com/donut/club203683544'
 
 
 def start():
@@ -31,7 +29,7 @@ def start():
 
 def inline_vk_donat():
     keyboard = VkKeyboard(inline=True)
-    keyboard.add_vkpay_button(HASH)
+    keyboard.add_openlink_button('❗Оплатить подписку❗', URL_PAY)
 
     return keyboard.get_keyboard()
 
