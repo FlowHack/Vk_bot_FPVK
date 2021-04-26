@@ -4,9 +4,9 @@ POSITIVE = VkKeyboardColor.POSITIVE
 PRIMARY = VkKeyboardColor.PRIMARY
 NEGATIVE = VkKeyboardColor.NEGATIVE
 
-WINDOWS = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/windows.zip'
-POSIX = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/posix.zip'
-MAC = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/mac.zip'
+WINDOWS = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/master.zip'
+POSIX = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/master.zip'
+MAC = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/master.zip'
 URL_PAY = 'https://vk.com/donut/club203683544'
 
 
@@ -119,6 +119,6 @@ def inline_download_mac():
 def inline_download_posix():
     keyboard = VkKeyboard(inline=True)
 
-    keyboard.add_openlink_button('Загрузить для LINUX', POSIX)
+    keyboard.add_openlink_button('Загрузить для Linux', POSIX)
 
     return keyboard.get_keyboard()
