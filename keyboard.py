@@ -8,6 +8,8 @@ PRIMARY = VkKeyboardColor.PRIMARY
 NEGATIVE = VkKeyboardColor.NEGATIVE
 
 WINDOWS = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/windows.zip'
+POSIX = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/posix.zip'
+MAC = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/app/mac.zip'
 
 
 def start():
@@ -91,6 +93,32 @@ def inline_help_parse_kriterii():
 def inline_download():
     keyboard = VkKeyboard(inline=True)
 
-    keyboard.add_openlink_button('Windows', WINDOWS)
+    keyboard.add_button('Windows', PRIMARY)
+    keyboard.add_button('MacOs', PRIMARY)
+    keyboard.add_button('Linux', PRIMARY)
+
+    return keyboard.get_keyboard()
+
+
+def inline_download_windows():
+    keyboard = VkKeyboard(inline=True)
+
+    keyboard.add_openlink_button('Загрузить для Windows', WINDOWS)
+
+    return keyboard.get_keyboard()
+
+
+def inline_download_mac():
+    keyboard = VkKeyboard(inline=True)
+
+    keyboard.add_openlink_button('Загрузить для MacOS', MAC)
+
+    return keyboard.get_keyboard()
+
+
+def inline_download_posix():
+    keyboard = VkKeyboard(inline=True)
+
+    keyboard.add_openlink_button('Загрузить для LINUX', POSIX)
 
     return keyboard.get_keyboard()

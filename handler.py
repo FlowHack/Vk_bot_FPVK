@@ -86,7 +86,7 @@ class Handler:
                 keyboard=keyboard
             )
         elif self.__similarity__('парсинг', text):
-            keyboard=create_keyboard.inline_help_parse()
+            keyboard = create_keyboard.inline_help_parse()
             self.__send_message__(
                 MESSAGES['help_parse'],
                 keyboard=keyboard,
@@ -136,6 +136,27 @@ class Handler:
 
             self.__send_message__(
                 MESSAGES['download'],
+                keyboard=keyboard
+            )
+        elif self.__similarity__('windows', text):
+            keyboard = create_keyboard.inline_download_windows()
+
+            self.__send_message__(
+                MESSAGES['download_windows'],
+                keyboard=keyboard
+            )
+        elif self.__similarity__('macos', text):
+            keyboard = create_keyboard.inline_download_mac()
+
+            self.__send_message__(
+                MESSAGES['download_mac'],
+                keyboard=keyboard
+            )
+        elif self.__similarity__('linux', text):
+            keyboard = create_keyboard.inline_download_posix()
+
+            self.__send_message__(
+                MESSAGES['download_posix'],
                 keyboard=keyboard
             )
 
