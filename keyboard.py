@@ -93,8 +93,6 @@ def inline_download():
 
     keyboard.add_button('Windows', PRIMARY)
     keyboard.add_line()
-    # keyboard.add_button('MacOs', PRIMARY)
-    # keyboard.add_line()
     keyboard.add_button('Linux', PRIMARY)
 
     return keyboard.get_keyboard()
@@ -104,14 +102,6 @@ def inline_download_windows():
     keyboard = VkKeyboard(inline=True)
 
     keyboard.add_openlink_button('Загрузить для Windows', WINDOWS)
-
-    return keyboard.get_keyboard()
-
-
-def inline_download_mac():
-    keyboard = VkKeyboard(inline=True)
-
-    keyboard.add_openlink_button('Загрузить для MacOS', MAC)
 
     return keyboard.get_keyboard()
 

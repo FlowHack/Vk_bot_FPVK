@@ -147,13 +147,6 @@ class Handler:
                 MESSAGES['download_windows'],
                 keyboard=keyboard
             )
-        elif self.__similarity__('macos', text):
-            keyboard = create_keyboard.inline_download_mac()
-
-            self.__send_message__(
-                MESSAGES['download_mac'],
-                keyboard=keyboard
-            )
         elif self.__similarity__('linux', text):
             keyboard = create_keyboard.inline_download_posix()
 
@@ -164,7 +157,7 @@ class Handler:
 
         else:
             self.__send_message__(
-                'Что это?\n\nНапиши мне "start" или "Привет"'
+                'Что это?\n\nНапиши мне "start", "Начать" или "Привет"'
             )
 
     def report(self):
