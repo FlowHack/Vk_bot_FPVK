@@ -78,7 +78,7 @@ class Handler:
             keyboard = create_keyboard.inline_help()
             self.__send_message__(
                 MESSAGES['help'], keyboard=keyboard,
-                attachment=self.upload_photo('FPVK_preview.gif')
+                attachment=self.upload_photo('FPVK_preview.png')
             )
         elif self.__similarity__('главная', text):
             keyboard = create_keyboard.inline_help_main()
