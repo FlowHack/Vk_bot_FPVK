@@ -1,16 +1,16 @@
+import os
 from datetime import datetime
 from difflib import SequenceMatcher
-from time import time as time_now
 
-from vk_api.tools import VkTools
-from vk_api.utils import get_random_id
-from vk_api.upload import VkUpload
-from vk_api.longpoll import VkEventType
-import os
 from requests.exceptions import ReadTimeout
+from vk_api.longpoll import VkEventType
+from vk_api.tools import VkTools
+from vk_api.upload import VkUpload
+from vk_api.utils import get_random_id
 
 import keyboard as create_keyboard
-from settings import GROUP_ID, MESSAGES, PATH_ATTACHMENT, LOGGER
+from settings import (GROUP_ID, LOGGER, MESSAGES, PATH_ATTACHMENT,
+                      PATH_DOWNLOADS, scheduler)
 
 LOGGER = LOGGER('handler', 'main')
 
@@ -24,10 +24,12 @@ class Handler:
         self._text_message = None
         self._api = api
         self._donat = []
-        self._time_donat = 0
 
         while True:
             try:
+                self.__get_Don__()
+                scheduler.add_job(self.__get_Don__, 'interval', minutes=5)
+
                 self.longpoll_listen()
             except ReadTimeout as error:
                 if "HTTPSConnectionPool(host='im.vk.com', port=443)" in \
@@ -137,7 +139,7 @@ class Handler:
             keyboard = create_keyboard.inline_download()
 
             self.__send_message__(
-                MESSAGES['download'],
+                MESSAGES['download'].format(downloads=self.__get_download__()),
                 keyboard=keyboard
             )
         elif self.__similarity__('windows', text):
@@ -147,6 +149,8 @@ class Handler:
                 MESSAGES['download_windows'],
                 keyboard=keyboard
             )
+            downloads = self.__get_download__()
+            self.__click_download_(downloads)
         elif self.__similarity__('linux', text):
             keyboard = create_keyboard.inline_download_posix()
 
@@ -154,6 +158,8 @@ class Handler:
                 MESSAGES['download_posix'],
                 keyboard=keyboard
             )
+            downloads = self.__get_download__()
+            self.__click_download_(downloads)
 
         else:
             self.__send_message__(
@@ -217,10 +223,9 @@ class Handler:
 
         return True if isMember == 1 else False
 
-    def __isDon__(self):
-        time = time_now()
-
-        if self._time_donat+300 < time:
+    def __get_Don__(self):
+        LOGGER.info('Получение списка донов')
+        try:
             params = {
                 'group_id': GROUP_ID,
                 'filter': 'donut'
@@ -231,9 +236,25 @@ class Handler:
 
             donat = request.get('items')
             self.donat = donat
-            self.time_donat = time
+        except ConnectionError:
+            LOGGER.error('Нет подключения для обновления списка донов')
+            return
+        LOGGER.info('Успешно')
 
+    def __isDon__(self):
         return True if self._user_id in self.donat else False
+
+    @staticmethod
+    def __get_download__():
+        with open(PATH_DOWNLOADS, 'r', encoding='utf-8') as downloads:
+            return int(downloads.read().strip())
+
+    @staticmethod
+    def __click_download_(downloads):
+        downloads = str(downloads + 1)
+
+        with open(PATH_DOWNLOADS, 'w', encoding='utf-8') as file:
+            file.write(downloads)
 
     @staticmethod
     def __similarity__(a: str, b: str):

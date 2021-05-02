@@ -3,10 +3,12 @@ from json import loads
 from logging import INFO, Formatter, getLogger
 from logging.handlers import RotatingFileHandler
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 
 PATH = os.getcwd()
 PATH_ATTACHMENT = os.path.join(PATH, 'attachment')
+PATH_DOWNLOADS = os.path.join(PATH, 'downloads.txt')
 
 
 def __get_logger__(name: str, file: str) -> object:
@@ -50,4 +52,7 @@ GROUP_ID = os.getenv('GROUP_ID')
 REPORT_ID = os.getenv('REPORT_ID')
 
 logger.info('Загружаю сообщения ответов для пользователей')
-MESSAGES = loads(open('response.json', 'r', encoding='utf-8').read())
+MESSAGES = loads(open('response.json', 'r', encoding='utf-8').read().strip())
+
+scheduler = BackgroundScheduler()
+scheduler.start()

@@ -5,7 +5,7 @@ from vk_api import VkApi
 from vk_api.longpoll import VkLongPoll
 
 from handler import Handler
-from settings import LOGGER, TOKEN, GROUP_ID
+from settings import GROUP_ID, LOGGER, PATH_DOWNLOADS, TOKEN, scheduler
 
 LOGGER = LOGGER('main_bot', 'main')
 
@@ -35,10 +35,15 @@ class Bot:
 
 if __name__ == '__main__':
     while True:
+        def __clear_downloads__():
+            LOGGER.warning('Сброс значения downloads')
+            with open(PATH_DOWNLOADS, 'w', encoding='utf-8') as file:
+                file.write('0')
+
+        scheduler.add_job(__clear_downloads__, trigger='cron', hour='0')
+
         try:
             my_bot = Bot()
         except BaseException as error:
-            LOGGER.error(
-                f'Неизестная ошибка! {error}'
-            )
+            LOGGER.error(f'Неизестная ошибка! {error}')
             pass
