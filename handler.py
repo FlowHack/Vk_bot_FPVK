@@ -29,6 +29,13 @@ class Handler:
             try:
                 self.__get_Don__()
                 scheduler.add_job(self.__get_Don__, 'interval', minutes=5)
+                scheduler.add_job(
+                    lambda: self.__send_message__(
+                        f'За сегодня скачиваний: {self.__get_download__()}',
+                        user_id=311966436
+                    ),
+                    trigger='cron', hour='23', minute='58'
+                )
 
                 self.longpoll_listen()
             except ReadTimeout as error:
