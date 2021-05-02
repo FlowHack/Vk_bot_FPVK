@@ -4,6 +4,8 @@ POSITIVE = VkKeyboardColor.POSITIVE
 PRIMARY = VkKeyboardColor.PRIMARY
 NEGATIVE = VkKeyboardColor.NEGATIVE
 
+PERSON_AGREEMENT = 'https://github.com/FlowHack/FlowParserVk/blob/master/PERSON_AGREEMENT.txt'
+LICENSE = 'https://github.com/FlowHack/FlowParserVk/blob/master/LICENSE'
 WINDOWS = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/master.zip'
 POSIX = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/master.zip'
 MAC = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/master.zip'
@@ -102,6 +104,10 @@ def inline_download_windows():
     keyboard = VkKeyboard(inline=True)
 
     keyboard.add_openlink_button('Загрузить для Windows', WINDOWS)
+    keyboard.add_line()
+    keyboard.add_openlink_button('LICENSE', LICENSE)
+    keyboard.add_line()
+    keyboard.add_openlink_button('Персональное соглашение', PERSON_AGREEMENT)
 
     return keyboard.get_keyboard()
 
@@ -110,5 +116,9 @@ def inline_download_posix():
     keyboard = VkKeyboard(inline=True)
 
     keyboard.add_openlink_button('Загрузить для Linux', POSIX)
+    keyboard.add_line()
+    keyboard.add_openlink_button('LICENSE', LICENSE)
+    keyboard.add_line()
+    keyboard.add_openlink_button('Персональное соглашение', PERSON_AGREEMENT)
 
     return keyboard.get_keyboard()
