@@ -1,4 +1,5 @@
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
+from settings import ADMIN_ID
 
 POSITIVE = VkKeyboardColor.POSITIVE
 PRIMARY = VkKeyboardColor.PRIMARY
@@ -12,10 +13,12 @@ MAC = 'https://github.com/FlowHack/FlowParserVk/archive/refs/heads/master.zip'
 URL_PAY = 'https://vk.com/donut/club203683544'
 
 
-def start():
+def start(id_user):
     keyboard = VkKeyboard()
 
     keyboard.add_button('🆘Помощь🆘', PRIMARY)
+    if (id_user is not None) and (id_user in ADMIN_ID):
+        keyboard.add_button('🆘SERVICE🆘', NEGATIVE)
     keyboard.add_line()
 
     keyboard.add_button('📀Скачать программу💿', PRIMARY)
@@ -25,6 +28,16 @@ def start():
     keyboard.add_line()
 
     keyboard.add_button('⛔Сообщить об ошибке⛔', NEGATIVE)
+
+    return keyboard.get_keyboard()
+
+
+def admin_keyboard():
+    keyboard = VkKeyboard(inline=True)
+
+    keyboard.add_button('Включить тех. обслуживание', POSITIVE)
+    keyboard.add_line()
+    keyboard.add_button('Выключить тех. обслуживание', NEGATIVE)
 
     return keyboard.get_keyboard()
 

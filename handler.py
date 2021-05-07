@@ -9,8 +9,8 @@ from vk_api.upload import VkUpload
 from vk_api.utils import get_random_id
 
 import keyboard as create_keyboard
-from settings import (GROUP_ID, LOGGER, MESSAGES, PATH_ATTACHMENT,
-                      PATH_DOWNLOADS, scheduler)
+from settings import (GROUP_ID, LOGGER, MESSAGES, PATH_ATTACHMENT, scheduler,
+                      update_settings, get_settings, ADMIN_ID)
 
 LOGGER = LOGGER('handler', 'main')
 
@@ -28,14 +28,18 @@ class Handler:
         while True:
             try:
                 self.__get_Don__()
-                scheduler.add_job(self.__get_Don__, 'interval', minutes=5)
-                scheduler.add_job(
-                    lambda: self.__send_message__(
-                        f'За сегодня скачиваний: {self.__get_download__()}',
-                        user_id=311966436
-                    ),
-                    trigger='cron', hour='23', minute='58'
-                )
+                if int(get_settings()['SCHEDULER_SEND_MESSAGE']) == 0:
+                    update_settings(SCHEDULER_SEND_MESSAGE=1)
+                    scheduler.add_job(self.__get_Don__, 'interval', minutes=5)
+                    scheduler.add_job(
+                        lambda:
+                        self.__send_message__(
+                            'За сегодня скачиваний: '
+                            f'{self.__get_download__()}',
+                            user_id=311966436
+                        ),
+                        trigger='cron', hour='23', minute='58', second='50'
+                    )
 
                 self.longpoll_listen()
             except ReadTimeout as error:
@@ -61,7 +65,7 @@ class Handler:
                 self.__similarity__('привет', text) or \
                 self.__similarity__('хай', text) or \
                 self.__similarity__('начать', text):
-            keyboard = create_keyboard.start()
+            keyboard = create_keyboard.start(self._user_id)
             self.__send_message__(MESSAGES['start'], keyboard=keyboard)
         elif self.__similarity__('проверить доступ к fpvk', text):
             if self.__isDon__():
@@ -143,12 +147,15 @@ class Handler:
                 attachment=[one, two, three]
             )
         elif self.__similarity__('📀cкачать программу💿', text):
-            keyboard = create_keyboard.inline_download()
+            if int(get_settings()['SERVICE']) == 1:
+                self.__send_message__(MESSAGES['download_service'])
+            else:
+                keyboard = create_keyboard.inline_download()
 
-            self.__send_message__(
-                MESSAGES['download'].format(downloads=self.__get_download__()),
-                keyboard=keyboard
-            )
+                self.__send_message__(
+                    MESSAGES['download'].format(downloads=self.__get_download__()),
+                    keyboard=keyboard
+                )
         elif self.__similarity__('windows', text):
             keyboard = create_keyboard.inline_download_windows()
 
@@ -167,6 +174,19 @@ class Handler:
             )
             downloads = self.__get_download__()
             self.__click_download_(downloads)
+        elif text == '🆘service🆘' and self._user_id in ADMIN_ID:
+            keyboard = create_keyboard.admin_keyboard()
+            self.__send_message__(
+                'Команды:', keyboard=keyboard
+            )
+        elif 'включить тех. обслуживание' == text and \
+                self._user_id in ADMIN_ID:
+            update_settings(SERVICE=1)
+            self.__send_message__('Включил тех. обслуживание =)')
+        elif 'выключить тех. обслуживание' == text and \
+                self._user_id in ADMIN_ID:
+            update_settings(SERVICE=0)
+            self.__send_message__('Выключил тех. обслуживание =)')
 
         else:
             self.__send_message__(
@@ -253,15 +273,12 @@ class Handler:
 
     @staticmethod
     def __get_download__():
-        with open(PATH_DOWNLOADS, 'r', encoding='utf-8') as downloads:
-            return int(downloads.read().strip())
+        return int(get_settings()['DOWNLOADS'])
 
     @staticmethod
     def __click_download_(downloads):
         downloads = str(downloads + 1)
-
-        with open(PATH_DOWNLOADS, 'w', encoding='utf-8') as file:
-            file.write(downloads)
+        update_settings(DOWNLOADS=downloads)
 
     @staticmethod
     def __similarity__(a: str, b: str):

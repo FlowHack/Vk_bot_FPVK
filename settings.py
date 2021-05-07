@@ -8,7 +8,13 @@ from dotenv import load_dotenv
 
 PATH = os.getcwd()
 PATH_ATTACHMENT = os.path.join(PATH, 'attachment')
-PATH_DOWNLOADS = os.path.join(PATH, 'downloads.txt')
+PATH_SETTINGS = os.path.join(PATH, 'settings.settings')
+TEMPLATE_SETTINGS = """
+DOWNLOADS={DOWNLOADS}
+SCHEDULER_SEND_MESSAGE={SCHEDULER_SEND_MESSAGE}
+SERVICE={SERVICE}
+"""
+ADMIN_ID = [311966436]
 
 
 def __get_logger__(name: str, file: str) -> object:
@@ -39,6 +45,45 @@ def __get_logger__(name: str, file: str) -> object:
     file_logger.addHandler(handler)
 
     return file_logger
+
+
+def create_settings():
+    __template__ = TEMPLATE_SETTINGS.format(
+        DOWNLOADS='0', SCHEDULER_SEND_MESSAGE='0', SERVICE='0'
+    )
+    with open(PATH_SETTINGS, 'w', encoding='utf-8') as write_file:
+        write_file.write(__template__.strip())
+
+
+create_settings()
+
+
+def get_settings() -> dict:
+    with open(PATH_SETTINGS, 'r', encoding='utf-8') as __file:
+        __settings__ = __file.read().strip().split()
+
+    SETTINGS = {}
+    for i in __settings__:
+        item = i.strip().split('=')
+        SETTINGS[str(item[0])] = str(item[1])
+
+    return SETTINGS
+
+
+def update_settings(**kwargs):
+    SETTINGS = get_settings()
+    for item in kwargs.items():
+        item = list(item)
+        SETTINGS[str(item[0])] = str(item[1])
+
+    __template = TEMPLATE_SETTINGS.format(
+        DOWNLOADS=SETTINGS['DOWNLOADS'],
+        SCHEDULER_SEND_MESSAGE=SETTINGS['SCHEDULER_SEND_MESSAGE'],
+        SERVICE=SETTINGS['SERVICE']
+    )
+
+    with open(PATH_SETTINGS, 'w', encoding='utf-8') as __file:
+        __file.write(__template.strip())
 
 
 LOGGER = __get_logger__

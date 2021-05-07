@@ -5,7 +5,7 @@ from vk_api import VkApi
 from vk_api.longpoll import VkLongPoll
 
 from handler import Handler
-from settings import GROUP_ID, LOGGER, PATH_DOWNLOADS, TOKEN, scheduler
+from settings import GROUP_ID, LOGGER, TOKEN, scheduler, update_settings
 
 LOGGER = LOGGER('main_bot', 'main')
 
@@ -34,14 +34,15 @@ class Bot:
 
 
 if __name__ == '__main__':
+    def __clear_downloads__():
+        LOGGER.warning('Сброс значения downloads')
+        update_settings(DOWNLOADS=0)
+
+    scheduler.add_job(
+        __clear_downloads__, trigger='cron', hour='0', minute='58', second='55'
+    )
+
     while True:
-        def __clear_downloads__():
-            LOGGER.warning('Сброс значения downloads')
-            with open(PATH_DOWNLOADS, 'w', encoding='utf-8') as file:
-                file.write('0')
-
-        scheduler.add_job(__clear_downloads__, trigger='cron', hour='0')
-
         try:
             my_bot = Bot()
         except BaseException as error:
