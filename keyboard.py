@@ -63,6 +63,12 @@ def inline_help():
     keyboard.add_line()
 
     keyboard.add_button('Парсинг', POSITIVE)
+    keyboard.add_line()
+
+    keyboard.add_button('Авторизоваться', POSITIVE)
+    keyboard.add_line()
+
+    keyboard.add_button('❓Частые вопросы❓', NEGATIVE)
 
     return keyboard.get_keyboard()
 

@@ -45,6 +45,8 @@ class Handler:
             except ReadTimeout as error:
                 if "HTTPSConnectionPool(host='im.vk.com', port=443)" in \
                         str(error):
+                    print(str(error))
+                    LOGGER.error(f'Ошибка Longpool {error}')
                     pass
 
     def longpoll_listen(self):
@@ -187,6 +189,18 @@ class Handler:
                 self._user_id in ADMIN_ID:
             update_settings(SERVICE=0)
             self.__send_message__('Выключил тех. обслуживание =)')
+        elif self.__similarity__('❓частые вопросы❓', text):
+            keyboard = create_keyboard.inline_help()
+            self.__send_message__(
+                MESSAGES['frequently_asked_questions'],
+                keyboard=keyboard
+            )
+        elif text == '1':
+            keyboard = create_keyboard.inline_help()
+            self.__send_message__(
+                MESSAGES['asked_1'],
+                keyboard=keyboard
+            )
 
         else:
             self.__send_message__(
