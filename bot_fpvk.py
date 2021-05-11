@@ -23,7 +23,9 @@ class Bot:
             client = VkApi(token=TOKEN)
 
             LOGGER.info('Получение longpoll')
-            vk_longpoll = VkLongPoll(client, group_id=GROUP_ID)
+            vk_longpoll = VkLongPoll(
+                client, group_id=GROUP_ID
+            )
 
             return client, vk_longpoll
 

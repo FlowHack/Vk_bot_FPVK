@@ -3,7 +3,7 @@ from datetime import datetime
 from difflib import SequenceMatcher
 
 from requests.exceptions import ReadTimeout
-from vk_api.longpoll import VkEventType
+from vk_api.longpoll import VkEventType, VkLongpollMode
 from vk_api.tools import VkTools
 from vk_api.upload import VkUpload
 from vk_api.utils import get_random_id
@@ -155,7 +155,8 @@ class Handler:
                 keyboard = create_keyboard.inline_download()
 
                 self.__send_message__(
-                    MESSAGES['download'].format(downloads=self.__get_download__()),
+                    MESSAGES['download'].format(
+                        downloads=self.__get_download__()),
                     keyboard=keyboard
                 )
         elif self.__similarity__('windows', text):
@@ -211,6 +212,7 @@ class Handler:
         while True:
             for event in self._longpoll.check():
                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+                    attachment = []
                     text = event.text
                     user_id = event.user_id
 
@@ -221,11 +223,25 @@ class Handler:
                     if length < 70:
                         return False, length
 
-                    self.__send_message__(
-                        f'Сообщение об ошибке от пользователя: {user_id}\n\n'
-                        f'{text}',
-                        user_id=311966436
-                    )
+                    for i in range(1, len(event.attachments) // 2 + 1):
+                        type_attach = event.attachments.get(f'attach{i}_type')
+                        attach = event.attachments.get(f'attach{i}')
+                        attachment.append(f'{type_attach}{attach}')
+
+                    if len(attachment) > 0:
+                        attachment = attachment
+                        self.__send_message__(
+                            f'Сообщение об ошибке от пользователя: {user_id}'
+                            f'\n\n{text}\n\nПрикреплено: '
+                            f'{", ".join(attachment)}',
+                            user_id=311966436,
+                        )
+                    else:
+                        self.__send_message__(
+                            f'Сообщение об ошибке от пользователя: {user_id}'
+                            f'\n\n{text}',
+                            user_id=311966436
+                        )
 
                     return True
 
@@ -258,11 +274,11 @@ class Handler:
         print(f'{datetime.now()}:::{self._user_id} -> {self._text_message}')
 
     def __isMember__(self):
-        isMember = self._api.groups.isMember(
+        is_Member = self._api.groups.isMember(
             group_id=GROUP_ID, user_id=self._user_id
         )
 
-        return True if isMember == 1 else False
+        return True if is_Member == 1 else False
 
     def __get_Don__(self):
         LOGGER.info('Получение списка донов')
