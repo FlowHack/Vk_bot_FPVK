@@ -3,14 +3,14 @@ from datetime import datetime
 from difflib import SequenceMatcher
 
 from requests.exceptions import ReadTimeout
-from vk_api.longpoll import VkEventType, VkLongpollMode
+from vk_api.longpoll import VkEventType
 from vk_api.tools import VkTools
 from vk_api.upload import VkUpload
 from vk_api.utils import get_random_id
 
 import keyboard as create_keyboard
-from settings import (GROUP_ID, LOGGER, MESSAGES, PATH_ATTACHMENT, scheduler,
-                      update_settings, get_settings, ADMIN_ID)
+from settings import (ADMIN_ID, GROUP_ID, LOGGER, MESSAGES, PATH_ATTACHMENT,
+                      get_settings, scheduler, update_settings)
 
 LOGGER = LOGGER('handler', 'main')
 
@@ -27,10 +27,10 @@ class Handler:
 
         while True:
             try:
-                self.__get_Don__()
+                self.__get_don__()
                 if int(get_settings()['SCHEDULER_SEND_MESSAGE']) == 0:
                     update_settings(SCHEDULER_SEND_MESSAGE=1)
-                    scheduler.add_job(self.__get_Don__, 'interval', minutes=5)
+                    scheduler.add_job(self.__get_don__, 'interval', minutes=5)
                     scheduler.add_job(
                         lambda:
                         self.__send_message__(
@@ -43,8 +43,8 @@ class Handler:
 
                 self.longpoll_listen()
             except ReadTimeout as error:
-                if "HTTPSConnectionPool(host='im.vk.com', port=443)" in \
-                        str(error):
+                if "HTTPSConnectionPool(host='im.vk.com', port=443)" \
+                        in str(error):
                     print(str(error))
                     LOGGER.error(f'Ошибка Longpool {error}')
                     pass
@@ -60,7 +60,7 @@ class Handler:
     def message_processing(self):
         text = self._text_message.lower()
 
-        if not self.__isMember__():
+        if not self.__is_member__():
             self.__send_message__(MESSAGES['not_is_member'])
 
         if self.__similarity__('start', text) or \
@@ -70,7 +70,7 @@ class Handler:
             keyboard = create_keyboard.start(self._user_id)
             self.__send_message__(MESSAGES['start'], keyboard=keyboard)
         elif self.__similarity__('проверить доступ к fpvk', text):
-            if self.__isDon__():
+            if self.__is_don__():
                 self.__send_message__(MESSAGES['vkpay_done'])
             else:
                 keyboard = create_keyboard.inline_vk_donat()
@@ -273,14 +273,14 @@ class Handler:
         self._api.messages.send(**post)
         print(f'{datetime.now()}:::{self._user_id} -> {self._text_message}')
 
-    def __isMember__(self):
+    def __is_member__(self):
         is_Member = self._api.groups.isMember(
             group_id=GROUP_ID, user_id=self._user_id
         )
 
         return True if is_Member == 1 else False
 
-    def __get_Don__(self):
+    def __get_don__(self):
         LOGGER.info('Получение списка донов')
         try:
             params = {
@@ -298,7 +298,7 @@ class Handler:
             return
         LOGGER.info('Успешно')
 
-    def __isDon__(self):
+    def __is_don__(self):
         return True if self._user_id in self.donat else False
 
     @staticmethod

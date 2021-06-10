@@ -12,12 +12,12 @@ LOGGER = LOGGER('main_bot', 'main')
 
 class Bot:
     def __init__(self):
-        self.client, self.longpoll = self.__get_client__()
+        self.client, self.longpoll = self.get_client()
         self.api = self.client.get_api()
         LOGGER.info('Получен клиент, longpoll и api')
         self.handler = Handler(self.api, self.client, self.longpoll)
 
-    def __get_client__(self):
+    def get_client(self):
         try:
             LOGGER.info('Получение клиента VK')
             client = VkApi(token=TOKEN)
@@ -32,7 +32,7 @@ class Bot:
         except ConnectionError:
             LOGGER.error('Нет подключения к интернету, перезапускаю')
             sleep(5)
-            self.__get_client__()
+            self.get_client()
 
 
 if __name__ == '__main__':
