@@ -254,9 +254,7 @@ class Handler:
         photo_id = photo['id']
         access_key = photo['access_key']
 
-        attachment = f'photo{owner_id}_{photo_id}_{access_key}'
-
-        return attachment
+        return f'photo{owner_id}_{photo_id}_{access_key}'
 
     def __send_message__(self, message, user_id=None, **kwargs):
         user_id = user_id or self._user_id
@@ -274,11 +272,11 @@ class Handler:
         print(f'{datetime.now()}:::{self._user_id} -> {self._text_message}')
 
     def __is_member__(self):
-        is_Member = self._api.groups.isMember(
+        is_member = self._api.groups.isMember(
             group_id=GROUP_ID, user_id=self._user_id
         )
 
-        return True if is_Member == 1 else False
+        return True if is_member == 1 else False
 
     def __get_don__(self):
         LOGGER.info('Получение списка донов')

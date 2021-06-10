@@ -17,7 +17,7 @@ SERVICE={SERVICE}
 ADMIN_ID = [311966436]
 
 
-def __get_logger__(name: str, file: str) -> object:
+def get_logger(name: str, file: str) -> object:
     """
     Функция создания логгера
     :param name: имя файла логгера
@@ -62,31 +62,31 @@ def get_settings() -> dict:
     with open(PATH_SETTINGS, 'r', encoding='utf-8') as __file:
         __settings__ = __file.read().strip().split()
 
-    SETTINGS = {}
+    settings = {}
     for i in __settings__:
         item = i.strip().split('=')
-        SETTINGS[str(item[0])] = str(item[1])
+        settings[str(item[0])] = str(item[1])
 
-    return SETTINGS
+    return settings
 
 
 def update_settings(**kwargs):
-    SETTINGS = get_settings()
+    settings = get_settings()
     for item in kwargs.items():
         item = list(item)
-        SETTINGS[str(item[0])] = str(item[1])
+        settings[str(item[0])] = str(item[1])
 
     __template = TEMPLATE_SETTINGS.format(
-        DOWNLOADS=SETTINGS['DOWNLOADS'],
-        SCHEDULER_SEND_MESSAGE=SETTINGS['SCHEDULER_SEND_MESSAGE'],
-        SERVICE=SETTINGS['SERVICE']
+        DOWNLOADS=settings['DOWNLOADS'],
+        SCHEDULER_SEND_MESSAGE=settings['SCHEDULER_SEND_MESSAGE'],
+        SERVICE=settings['SERVICE']
     )
 
     with open(PATH_SETTINGS, 'w', encoding='utf-8') as __file:
         __file.write(__template.strip())
 
 
-LOGGER = __get_logger__
+LOGGER = get_logger
 
 logger = LOGGER('settings', 'main')
 
