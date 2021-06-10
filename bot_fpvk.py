@@ -36,12 +36,12 @@ class Bot:
 
 
 if __name__ == '__main__':
-    def __clear_downloads__():
+    def clear_downloads():
         LOGGER.warning('Сброс значения downloads')
         update_settings(DOWNLOADS=0)
 
     scheduler.add_job(
-        __clear_downloads__, trigger='cron', hour='0', minute='58', second='55'
+        clear_downloads, trigger='cron', hour='0', minute='58', second='55'
     )
 
     while True:
