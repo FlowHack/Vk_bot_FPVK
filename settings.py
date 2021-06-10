@@ -92,9 +92,9 @@ logger = LOGGER('settings', 'main')
 
 logger.info('Загружаю переменные виртуального окружения')
 load_dotenv()
-TOKEN = os.getenv('TOKEN')
-GROUP_ID = os.getenv('GROUP_ID')
-REPORT_ID = os.getenv('REPORT_ID')
+TOKEN = os.environ.get('TOKEN')
+GROUP_ID = os.environ.get('GROUP_ID')
+REPORT_ID = os.environ.get('REPORT_ID')
 
 logger.info('Загружаю сообщения ответов для пользователей')
 MESSAGES = loads(open('response.json', 'r', encoding='utf-8').read().strip())

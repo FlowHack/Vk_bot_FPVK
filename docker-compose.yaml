@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  bot:
+    image: flowhack/vk-bot-fpvk
+    restart: always
+    env_file:
+      - ./.env
