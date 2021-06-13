@@ -63,6 +63,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
+          cd Vk_bot_FPVK
           sudo docker ${{ secrets.USER }}/vk-bot-fpvk
           sudo docker-compose stop
           sudo docker-compose rm bot

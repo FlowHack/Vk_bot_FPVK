@@ -203,11 +203,6 @@ class Handler:
                 keyboard=keyboard
             )
 
-        else:
-            self.__send_message__(
-                'Что это?\n\nНапиши мне "start", "Начать" или "Привет"'
-            )
-
     def report(self):
         while True:
             for event in self._longpoll.check():
@@ -220,7 +215,7 @@ class Handler:
                         return None
 
                     length = len(text.split(' '))
-                    if length < 70:
+                    if length < 10:
                         return False, length
 
                     for i in range(1, len(event.attachments) // 2 + 1):
