@@ -202,6 +202,14 @@ class Handler:
                 MESSAGES['asked_1'],
                 keyboard=keyboard
             )
+        elif self.__similarity__('ошибки windows', text):
+            keyboard = create_keyboard.inline_help_win()
+            self.__send_message__(
+                MESSAGES['win_help'],
+                keyboard=keyboard
+            )
+        elif self.__similarity__('ошибка: 0x800700e1', text):
+            self.__send_message__(MESSAGES['win_help_0x800700E1'])
 
     def report(self):
         while True:

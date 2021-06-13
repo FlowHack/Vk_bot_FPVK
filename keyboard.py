@@ -128,6 +128,8 @@ def inline_download_windows():
     keyboard.add_openlink_button('LICENSE', LICENSE)
     keyboard.add_line()
     keyboard.add_openlink_button('Персональное соглашение', PERSON_AGREEMENT)
+    keyboard.add_line()
+    keyboard.add_button('Ошибки Windows', NEGATIVE)
 
     return keyboard.get_keyboard()
 
@@ -140,5 +142,12 @@ def inline_download_posix():
     keyboard.add_openlink_button('LICENSE', LICENSE)
     keyboard.add_line()
     keyboard.add_openlink_button('Персональное соглашение', PERSON_AGREEMENT)
+
+    return keyboard.get_keyboard()
+
+def inline_help_win():
+    keyboard = VkKeyboard(inline=True)
+
+    keyboard.add_button('Ошибка: 0x800700E1', PRIMARY)
 
     return keyboard.get_keyboard()
