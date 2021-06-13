@@ -145,6 +145,7 @@ def inline_download_posix():
 
     return keyboard.get_keyboard()
 
+
 def inline_help_win():
     keyboard = VkKeyboard(inline=True)
 
